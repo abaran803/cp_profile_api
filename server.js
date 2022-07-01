@@ -13,17 +13,104 @@ const checkProfileExistence = async (profiles) => {
   const isArray = Array.isArray(profiles);
 
   const checkForSingleProfile = async (profile) => {
+
     try {
       const response = await axios.get(`https://www.codechef.com/users/${profile}`)
       const html = response.data;
       const $ = cheerio.load(html);
       const status = $(".h2-style", html);
       status.each(function() {
-        platformsContainingProfile.push({id: profile, status: "found"})
+        platformsContainingProfile.push({id: profile, platform: 'Codechef'})
       });
     } catch(err) {
-      platformsContainingProfile.push({id: profile, status: "not found"})
+      // platformsContainingProfile.push({id: profile, status: "not found"})
     }
+
+    try {
+      const response = await axios.get(`https://codeforces.com/profile/${profile}`)
+      const html = response.data;
+      const $ = cheerio.load(html);
+      const status = $(".main-info", html);
+      status.each(function() {
+        platformsContainingProfile.push({id: profile, platform: 'Codeforces'})
+      });
+    } catch(err) {
+      // platformsContainingProfile.push({id: profile, status: "not found"})
+    }
+
+    // try {
+    //   console.log(`https://www.hackerrank.com/${profile}?hr_r=1`)
+    //   const response = await axios.get(`https://www.hackerrank.com`)
+    //   const html = response.data;
+    //   console.log(html);
+    //   const $ = cheerio.load(html);
+    //   const status = $(".profile-heading", html);
+    //   status.each(function() {
+    //     platformsContainingProfile.push({id: profile, platform: 'Hackerrank'})
+    //   });
+    // } catch(err) {
+    //   console.log(err);
+    //   // platformsContainingProfile.push({id: profile, status: "not found"})
+    // }
+    
+    try {
+      const response = await axios.get(`https://www.hackerearth.com/@${profile}`)
+      const html = response.data;
+      const $ = cheerio.load(html);
+      const status = $(".personal-info", html);
+      status.each(function() {
+        platformsContainingProfile.push({id: profile, platform: 'Hackerearth'})
+      });
+    } catch(err) {
+      console.log(err)
+      // platformsContainingProfile.push({id: profile, status: "not found"})
+    }
+    
+    try {
+      const response = await axios.get(`https://leetcode.com/${profile}`)
+      const html = response.data;
+      const $ = cheerio.load(html);
+      const status = $(".shadow-level3", html);
+      let isFound = false;
+      status.each(function() {
+        isFound = true;
+      });
+      if(isFound) {
+        platformsContainingProfile.push({id: profile, platform: 'Leetcode'})
+      }
+    } catch(err) {
+      // platformsContainingProfile.push({id: profile, status: "not found"})
+    }
+    
+    try {
+      const response = await axios.get(`https://www.spoj.com/users/${profile}/`)
+      const html = response.data;
+      const $ = cheerio.load(html);
+      const status = $("#user-profile-left", html).find('h3').text();
+      if(status) {
+        platformsContainingProfile.push({id: profile, platform: 'Spoj'})
+      }
+    } catch(err) {
+      // platformsContainingProfile.push({id: profile, status: "not found"})
+    }
+
+    try {
+      const response = await axios.get(`https://auth.geeksforgeeks.org/user/${profile}`)
+      const html = response.data;
+      const $ = cheerio.load(html);
+      const status = $(".mdl-grid", html);
+      let isFound = false;
+      status.each(function() {
+        isFound = true;
+      });
+      if(isFound) {
+        platformsContainingProfile.push({id: profile, platform: 'Geeksforgeeks'})
+      }
+    } catch(err) {
+      console.log(err)
+      // platformsContainingProfile.push({id: profile, status: "not found"})
+    }
+
   }
 
   if(isArray) {
@@ -32,11 +119,15 @@ const checkProfileExistence = async (profiles) => {
     for(let i=0; i<profiles.length; i++) {
       await checkForSingleProfile(profiles[i]);
     }
-    return platformsContainingProfile;
 
   } else {
-    platformsContainingProfile.push(await checkForSingleProfile(profiles));
+
+    // Checking for single profile
+    await checkForSingleProfile(profiles);
+
   }
+  
+  return platformsContainingProfile;
 
 }
 
@@ -126,9 +217,11 @@ app.get('/:platform/:profile', async (req, res) => {
 
 // Extract the profiles data from all the available platforms
 // One or more profile can be checked at a time using ?profiles
-app.get('/:profiles', async (req, res) => {
-  const data = await checkProfileExistence(req.query.profiles)
+app.get('/profiles', async (req, res) => {
+
+  const data = await checkProfileExistence(req.query.id)
   res.json(data);
+
 })
 
 // Starting the server
