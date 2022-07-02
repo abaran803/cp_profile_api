@@ -1,0 +1,14 @@
+### Homepage
+GET http://localhost:3000/
+
+
+### Getting Rating of specific profile at specific platform
+GET http://localhost:3000/codechef/ayush803
+
+
+### Checking the existence of a profile on all the platform
+GET http://localhost:3000/check?id=abaran803
+
+
+### Checking the existence of a multiple profile on all the platform
+GET http://localhost:3000/check?id=abaran803&id=amit&id=ajay
