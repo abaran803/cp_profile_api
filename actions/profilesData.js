@@ -48,6 +48,7 @@ const getPlatformBasedData = (platform, html) => {
 const getProfile = async (profile, platform) => {
 
     var baseURL = '';
+    var extras = '';
 
     switch (platform.toLowerCase()) {
 
@@ -73,14 +74,15 @@ const getProfile = async (profile, platform) => {
 
         case 'geeksforgeeks':
             baseURL = 'https://auth.geeksforgeeks.org/user/';
+            extras = '/practice';
             break;
 
     }
 
     try {
-        const rawData = await axios.get(`${baseURL}${profile}`)
+        const rawData = await axios.get(`${baseURL}${profile}${extras}`)
         const data = getPlatformBasedData(platform, rawData.data);
-        return { ...data, url: `${baseURL}${profile}` };
+        return { ...data, url: `${baseURL}${profile}${extras}` };
     } catch (err) {
         console.log(err)
         return { 'status': 'Some error occured' }

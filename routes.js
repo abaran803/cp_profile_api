@@ -11,10 +11,10 @@ router.get('/', (req, res) => {
 })
 
 // Get the information of single profile, using details in URL
-router.get('/:platform/:profile', async (req, res) => {
+router.post('/profileData', async (req, res) => {
 
-    const profile = req.params.profile;
-    const platform = req.params.platform;
+    const profile = req.body.profile;
+    const platform = req.body.platform;
 
     const query = [{ profile, platform }];
 
