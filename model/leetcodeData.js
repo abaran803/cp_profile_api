@@ -1,4 +1,7 @@
+// Problem with Leetcode and Axios
+
 const cheerio = require('cheerio');
+const fs = require('fs');
 
 module.exports = (html) => {
 
@@ -18,12 +21,16 @@ module.exports = (html) => {
     $("h1.h2-style", html).each(function () {
         name = $(this).text();
     })
+    name = $('.shadow-level3 .text-label-2 .text-label-1').text();
 
     // Extracting Rating
     $('.w-full', html).each(function() {
-        rating = $('.ttext-label-1').text();
+        rating = $('.ttext-label-1', html).text();
         console.log(rating);
     });
+    rating = $('.shadow-level3 .text-label-2 .ttext-label-1').text();
+    console.log($('.ttext-label-1', html).text());
+    fs.writeFileSync('new3.html', html);
     // console.log(rating)
 
     // Extracting Global Rank

@@ -1,4 +1,12 @@
+// Problem with Hackerearth and Axios
+
 const cheerio = require('cheerio');
+const fs = require('fs');
+var express = require('express')
+var cors = require('cors')
+var app = express()
+ 
+app.use(cors())
 
 module.exports = (html) => {
 
@@ -13,16 +21,20 @@ module.exports = (html) => {
     let partially_solved_count = '';
 
     const $ = cheerio.load(html);
-
+    // fs.writeFileSync('new.html', html);
     // Extracting Name
-    $("h1.h2-style", html).each(function () {
-        name = $(this).text();
-    })
+    // $("h1.h2-style", html).each(function () {
+    //     name = $(this).text();
+    // })
+    name = $(".left .name", html).text();
 
     // Extracting Rating
-    $(".rating-number", html).each(function () {
-        rating = $(this).text();
-    })
+    // $(".rating-number", html).each(function () {
+    //     rating = $(this).text();
+    // })
+    console.log($(".left", html).text())
+    console.log($(".metric .value").html())
+    rating = $(".right .contest-ratings .metric .value", html).text();
 
     // Extracting Global Rank
     $(".rating-number", html).each(function () {

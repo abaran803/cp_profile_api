@@ -34,6 +34,7 @@ module.exports = async (profiles) => {
             // platformsContainingProfile.push({id: profile, status: "not found"})
         }
 
+        // HackerRank is not Working
         // try {
         //   console.log(`https://www.hackerrank.com/${profile}?hr_r=1`)
         //   const response = await axios.get(`https://www.hackerrank.com`)
