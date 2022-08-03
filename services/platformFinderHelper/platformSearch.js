@@ -110,18 +110,10 @@ module.exports = async (profiles) => {
 
     }
 
-    if (isArray) {
-
-        // Checking all the profiles
-        for (let i = 0; i < profiles.length; i++) {
-            await checkForSingleProfile(profiles[i]);
-        }
-
-    } else {
-
-        // Checking for single profile
-        await checkForSingleProfile(profiles);
-
+    // Checking for single profile
+    for(var i=0; i<profiles.length; i++) {
+        const profile = profiles[i];
+        await checkForSingleProfile(profile);
     }
 
     return platformsContainingProfile;
